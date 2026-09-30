@@ -67,3 +67,15 @@ class EntityLink(SQLModel, table=True):
     source: str
     created_at: datetime = Field(
         default_factory=jetzt, sa_type=DateTime(timezone=True))
+
+
+class AuditLog(SQLModel, table=True):
+    __tablename__ = "audit_log"
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    org_id: uuid.UUID = Field(foreign_key="organizations.id", index=True)
+    action: str
+    details: str | None = None
+    target_id: uuid.UUID | None = None
+    created_at: datetime = Field(
+        default_factory=jetzt, sa_type=DateTime(timezone=True))
